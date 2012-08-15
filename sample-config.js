@@ -2,7 +2,7 @@
     "twitter": {
         "consumer_key": "",
         "consumer_secret": "",
-        "access_token_key": "-y2NhsJapiyDH4wqb025R7mMxyZgMSIrBNdeGl754",
+        "access_token_key": "",
         "access_token_secret": ""
     },
     "accounts": [
