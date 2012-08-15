@@ -1,0 +1,53 @@
+var util = require('util'),
+    twitter = require('twitter'),
+    nconf = require('nconf');
+
+
+    nconf.argv().env();
+    nconf.file({
+       file: 'config.json'
+    });
+var twit = new twitter({
+    consumer_key: nconf.get('twitter:consumer_key'),
+    consumer_secret: nconf.get('twitter:consumer_secret'),
+    access_token_key: nconf.get('twitter:access_token_key'),
+    access_token_secret: nconf.get('twitter:access_token_secret')
+});
+
+function is_retwittable(data) {
+    data.retweeted = data.retweeted || false;
+    data.entities = data.entities || {};
+    data.entities.hashtags = data.entities.hashtags || [];
+    data.user = data.user || {};
+
+    var has_hashtag = false,
+        idx,
+        e,
+        is_myself;
+   
+    for(idx = 0; idx<data.entities.hashtags.length && !has_hashtag; idx=idx+1) {
+        e = data.entities.hashtags[idx];
+        has_hashtag = e.text == nconf.get('hashtag');
+    }
+
+    is_myself = data.user.screen_name == nconf.get('myself');
+
+    return !data.retweeted && has_hashtag && !is_myself;
+}
+
+nconf.get('accounts').forEach(function(pseudo) {
+    twit.stream('user', {track:'nodejs'}, function(stream) {
+        stream.on('data', function(data) {
+            var text;
+            if(is_retwittable(data)) {
+                text = '@' + pseudo + ' RT ' + data.text;
+                if(text.length > 140) {
+                   text = text.substring(0, 140-3) + '...'
+                }
+                twit.updateStatus(text, function(data) {
+                    console.log(text )
+                });
+            }
+        });
+    });
+});

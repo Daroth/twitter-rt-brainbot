@@ -1,0 +1,26 @@
+{
+    "author": "Daroth <daroth@braindead.fr> (http://braindead.fr/)",
+    "name": "twitter-brainbot",
+    "keywords": [
+        "braindead",
+        "twitter",
+        "bot"
+    ],
+    "description": "A configurable RT bot",
+    "version": "0.0.1",
+    "homepage": "http://braindead.fr/",
+    "dependencies": {
+        "twitter": "*",
+        "nconf": "*"
+     },
+    "devDependencies": {
+        "vows": "*"
+    },
+    "optionalDependencies": {},
+    "engines": {
+        "node": "0.8.x"
+    },
+    "scripts": {
+        "test": "vows"
+    }
+}
